@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>GSAP Animation</title>
+    <link rel="stylesheet" href="styles.scss" />
+    <script type="module" src="app.js"></script>
+</head>
+<body>
+<div style="height: 900px"></div>
+
+<include src="test-include.html" locals='{"text": "Button"}'></include>
+
+<section class="sections" id="sections">
+    <div id="sections-nav" class="sections-nav">
+        <each loop="index in [1,2,3,4,5,6]">
+            <button data-target="#section__{{ index }}" class="sections-nav-button">{{index}}</button>
+        </each>
+    </div>
+    <div id="sections-graphics" class="sections-graphics"></div>
+    <div class="sections-wrap">
+
+        <each loop="index in [1,2,3,4,5,6]">
+            <div class="section" id="section__{{ index }}">
+                <div class="section-wrap">
+                    <div class="section-content">
+                        <div class="section-content-item section-content-item__left">SECTION 1</div>
+                        <div class="section-content-item section-content-item__right">
+                            <div class="section-content-item-card section-content-item-card__1">CARD 1</div>
+                            <div class="section-content-item-card section-content-item-card__2" hidden>CARD 2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </each>
+
+    </div>
+    <a class="btn" id="sections-btn" href="#">BUTTON HERE</a>
+</section>
+
+
+<div style="height: 900px"></div>
+</body>
+</html>
