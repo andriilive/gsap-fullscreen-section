@@ -6,6 +6,10 @@ body, html {
   background: #f6f6f6;
 }
 
+.transition {
+  transition: var(--transtion, all) var(--transtion-duration, .3s);
+}
+
 a {
   text-decoration: none;
 }
@@ -15,9 +19,15 @@ a {
 }
 
 .sections {
+  --transition-duration: 1s;
   overflow: hidden;
   background: var(--bg-color);
   position: relative;
+
+
+  --section-nx-1: #2C225C;
+
+  background: #2C225C;
 
   &-wrap {
     overflow: auto;
@@ -29,25 +39,76 @@ a {
     right: 20px;
   }
 
+  &-btn {
+    --transtion-duration: 85ms;
+    //--btn-bg: white;
+    //--btn-color: black;
+    @extend .transition;
+    background: var(--bg, white);
+    color: var(--color, black);
+    padding: 0.9rem 1.2rem;
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .from {
+    position: absolute;
+    width: 771px;
+    height: 771px;
+    left: -342px;
+    top: -547px;
+
+    background: radial-gradient(57.82% 57.82% at 82.47% 82.9%, rgba(0, 234, 205, 0.21) 0%, rgba(143, 93, 231, 0.11) 66.15%, rgba(44, 34, 92, 0) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    opacity: 0;
+  }
+
+  .to {
+    width: 1278px;
+    height: 1278px;
+    left: -462px;
+    top: -397px;
+  }
+
+  &:not(.j-active) & {
+    &-graphics {
+      top: -547px;
+      left: -342px;
+      transform: scale(0.6);
+    }
+    &-btn {
+      bottom: -50px;
+    }
+  }
+
   &-graphics {
-    width: 600px;
-    height: 600px;
+    z-index: 0;
+    transition-timing-function: ease-in-out;
+    --transtion-duration: 1800ms;
+    --size: 1278px;
+    --y-move: -462px;
+
+    @extend .transition;
+    width: var(--size);
+    height: var(--size);
     background: #fff;
     border-radius: 100%;
-    top: -200px;
-    left: -200px;
+    top: -397px;
+    left: var(--y-move);
     position: absolute;
+
+    background: radial-gradient(57.82% 57.82% at 82.47% 82.9%, rgba(0, 234, 205, 0.21) 0%, rgba(143, 93, 231, 0.11) 66.15%, rgba(44, 34, 92, 0) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
   }
 }
 
 .section {
-  height: 100vh;
-
+   height: 100vh;
   border-bottom: 1px dashed rgba(225, 225, 225, 0.18);
 
   &-wrap {
+    height: 100vh;
     position: relative;
-    height: 100%;
     display: flex;
     align-items: center;
 
@@ -56,41 +117,34 @@ a {
     }
   }
 
+  &.j-active &-content {
+
+  }
+
   &-content {
-    max-width: 1000px;
+    padding: 0 15px;
+    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 100px;
 
     font-size: 4rem;
-
-    gap: 64px;
 
     &-item {
       align-self: center;
 
       &__right {
         overflow: hidden;
-        padding: 50px;
+        padding: 10px;
       }
 
       &-card {
-        padding: 50px;
+        padding: 210px 50px;
         background: var(--bg, white);
         color: var(--color, black);
       }
     }
   }
-}
-
-.btn {
-  //--btn-bg: white;
-  //--btn-color: black;
-  background: var(--bg, white);
-  color: var(--color, black);
-  padding: 0.9rem 1.2rem;
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
 }
