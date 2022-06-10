@@ -5,58 +5,123 @@ gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin, CSSPlugin);
 
 $(document).ready(function () {
 
-    const $sections = $('#sections');
+    gsap.to(window, {duration: 2, scrollTo: "html"});
+
+    // GASP NOT JQUERY ELEMENTS
+    const $canvas = $('#sections');
+    const canvas = $canvas[0];
+
     const sections = gsap.utils.toArray('.section');
-    const section = gsap.utils.selector('.section');
+    const sectionsButton = $('#sections-btn')[0];
+    const $circle = $('#sections-graphics');
+    const circle = $circle[0];
 
-    const circle = gsap.utils.selector('#sections-graphics');
-    const sectionsButton = gsap.utils.selector('#sections-btn');
-
-    const sectionsTimeline = gsap.timeline();
+    $canvas.css({'--bg-color': '#000'}).data('sections', sections.length);
 
     // Defaults
-    gsap.set(sectionsButton, {});
+    function set_defaults() {
+        // gsap.set(sectionsButton, {autoAlpha: 0, y: 500});
+        // gsap.set(circle, {autoAlpha: 0, scale: 0});
+    }
 
-    // let scrollTween = gsap.to(sections, {
-    //
-    //     scrollTrigger: {
-    //         trigger: "#sections",
-    //         markers: true,
-    //         animation: sectionsTimeline,
-    //         id: '#sections',
-    //         pin: true,
-    //         snap: {
-    //             delay: 0,
-    //             snapTo: 1 / (sections.length - 1)
-    //         },
-    //         scrub: 0,
-    //
-    //         onEnter: (self) => {
-    //             console.log("onEnter", self);
-    //
-    //             gsap.to(sectionsButton, {y: false, autoAlpha: 1})
-    //         },
-    //         onLeave: (self) => console.log("onLeave", self),
-    //
-    //         onUpdate: (self) => {
-    //             // console.log('onUpdate', self)
-    //         },
-    //         onToggle: (self) => {
-    //             console.log("onToggle", self, {active: self.isActive})
-    //         },
-    //         onScrubComplete: (self) => {
-    //             console.log('onScrubComplete', self)
-    //         },
-    //         onSnapComplete: (self) => {
-    //             console.log('onSnapComplete', self)
-    //         }
-    //
-    //         // onEnterBack: () => console.log("enterBack"),
-    //         // onLeaveBack: () => console.log("leaveBack"),
-    //     }
-    // });
+    set_defaults();
 
-    // sectionsTimeline.addLabel("intro-visible").to(sectionsButton, {autoAlpha: 1, y: 0});
+    ScrollTrigger.defaults({
+        markers: true
+    });
 
-    $sections.css({'--bg-color': '#000'}).data('sections', sections.length);
+    const canvasScrollTrigger = ScrollTrigger.create({
+        trigger: canvas,
+        pin: '#sections-wrap',
+        start: 'top top',
+        end: 'bottom bottom',
+        toggleClass: 'j-active',
+        scrub: true,
+        markers: false,
+        snapTo: 1 / (sections.length - 1),
+        id: "sections",
+        onToggle: self => {
+            console.log('canvasOnToggle', self.isActive)
+        },
+        onUpdate: self => {
+            const {progress} = self;
+        },
+        onLeave: self => {
+
+        }
+    });
+
+    sections.forEach(function (thisSection, i) {
+        console.log(i, thisSection, thisSection.nextElementSibling);
+
+        // gsap.set(thisSection, {height: '250vh'});
+
+        // let anim = gsap.timeline();
+        //
+        // ScrollTrigger.create({
+        //     trigger: thisSection,
+        //     pin: thisSection,
+        //     start: 'top top',
+        //     end: 'bottom bottom',
+        //     scrub: 0,
+        //     animation: anim
+        // });
+        //
+        // anim.to(thisSection, {autoAlpha: 0});
+
+        const sectionsTimeline = gsap.timeline(/*{paused: true}*/);
+
+        const sectionsScrollTrigger = ScrollTrigger.create({
+            trigger: thisSection,
+            start: 'top center',
+            end: 'bottom center',
+            toggleClass: 'j-active',
+            scrub: true,
+            snap: {
+                snapTo: 1 / 5
+            },
+            animation: sectionsTimeline,
+            id: "section-" + i,
+            onToggle: self => {
+
+                const {isActive, direction} = self;
+                const $circle = $(circle);
+
+                if (isActive) {
+                    window.activeSection = i + 1;
+                    // if true -> to right || if false <- to left
+                    if (activeSection % 2 === 0) {
+
+                    } else {
+                        // sectionsTimeline.to(circle, {x: '100%'})
+                    }
+                }
+
+                sectionsTimeline.fromTo(circle, {x: 0}, {x: '100%'});
+
+
+                // 1 | 1
+
+                // console.log('sectionOnToggle', self, circleDirection)
+            },
+            onUpdate: self => {
+                const {progress} = self;
+                // console.log('sectionProgress', progress)
+            },
+        });
+
+        ScrollTrigger.create({
+            target: thisSection,
+            id: "section-" + i,
+            pin: true,
+            top: 'top top',
+            start: 'top bottom',
+            onEnter: self => {
+
+            }
+            // containerAnimation: containerAnimation,
+        });
+
+    })
+
 });
