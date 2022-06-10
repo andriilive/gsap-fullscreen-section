@@ -11,32 +11,36 @@
 
 <include src="test-include.html" locals='{"text": "Button"}'></include>
 
-<section class="sections" id="sections">
-    <div id="sections-nav" class="sections-nav">
-        <each loop="index in [1,2,3,4,5,6]">
-            <button data-target="#section__{{ index }}" class="sections-nav-button">{{index}}</button>
-        </each>
-    </div>
-    <div id="sections-graphics" class="sections-graphics"></div>
-    <div class="sections-wrap" id="sections-wrap">
+<div id="sections-scroller">
+    <section class="sections" id="sections">
+        <div id="sections-pin">
+            <div id="sections-nav" class="sections-nav">
+                <each loop="index in [1,2,3,4,5,6]">
+                    <button data-target="#section__{{ index }}" class="sections-nav-button">{{index}}</button>
+                </each>
+            </div>
+            <div id="sections-graphics" class="sections-graphics"></div>
+            <a class="btn sections-btn" id="sections-btn" href="#">BUTTON HERE</a>
+        </div>
+        <div class="sections-wrap" id="sections-wrap">
 
-        <each loop="index in [1,2,3,4,5,6]">
-            <div class="section" id="section__{{ index }}">
-                <div class="section-wrap">
-                    <div class="section-content">
-                        <div class="section-content-item section-content-item__left">SECTION 1</div>
-                        <div class="section-content-item section-content-item__right">
-                            <div class="section-content-item-card section-content-item-card__1">CARD 1</div>
-                            <div class="section-content-item-card section-content-item-card__2" hidden>CARD 2</div>
+            <each loop="index in [1,2,3,4,5,6]">
+                <div class="section" id="section__{{ index }}">
+                    <div class="section-wrap">
+                        <div class="section-content">
+                            <div class="section-content-item section-content-item__left">SECTION 1</div>
+                            <div class="section-content-item section-content-item__right">
+                                <div class="section-content-item-card section-content-item-card__1">CARD 1</div>
+                                <div class="section-content-item-card section-content-item-card__2" hidden>CARD 2</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </each>
+            </each>
 
-    </div>
-    <a class="btn sections-btn" id="sections-btn" href="#">BUTTON HERE</a>
-</section>
+        </div>
+    </section>
+</div>
 
 <div id="whitelist" class="j-active"></div>
 

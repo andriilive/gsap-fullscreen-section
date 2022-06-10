@@ -5,7 +5,7 @@ gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin, CSSPlugin);
 
 $(document).ready(function () {
 
-    gsap.to(window, {duration: 2, scrollTo: "html"});
+    // gsap.to(window, {duration: 2, scrollTo: "html"});
 
     // GASP NOT JQUERY ELEMENTS
     const $canvas = $('#sections');
@@ -30,15 +30,22 @@ $(document).ready(function () {
         markers: true
     });
 
-    const canvasScrollTrigger = ScrollTrigger.create({
+    const CanvasAnimation = gsap.timeline({paused: true});
+    const SectionAnimation = gsap.timeline({paused: true});
+
+    gsap.set(circle, {});
+
+    CanvasAnimation
+        .to('body', {overflow: 'hidden'})
+        .to({circle},{y: -547, x: -342, scale: 0.6, duration: 0})
+
+    ScrollTrigger.create({
         trigger: canvas,
-        pin: '#sections-wrap',
         start: 'top top',
         end: 'bottom bottom',
         toggleClass: 'j-active',
         scrub: true,
-        markers: false,
-        snapTo: 1 / (sections.length - 1),
+        markers: true,
         id: "sections",
         onToggle: self => {
             console.log('canvasOnToggle', self.isActive)
@@ -46,12 +53,21 @@ $(document).ready(function () {
         onUpdate: self => {
             const {progress} = self;
         },
-        onLeave: self => {
+
+        /*top: -547px;
+        left: -342px;
+        transform: scale(0.6);*/
+
+        onEnter: self => {
 
         }
     });
 
-    sections.forEach(function (thisSection, i) {
+    sections.forEach(function (thisSection, i){
+
+    });
+
+    /*sections.forEach(function (thisSection, i) {
         console.log(i, thisSection, thisSection.nextElementSibling);
 
         // gsap.set(thisSection, {height: '250vh'});
@@ -69,17 +85,18 @@ $(document).ready(function () {
         //
         // anim.to(thisSection, {autoAlpha: 0});
 
-        const sectionsTimeline = gsap.timeline(/*{paused: true}*/);
+        const sectionsTimeline = gsap.timeline(/!*{paused: true}*!/);
 
         const sectionsScrollTrigger = ScrollTrigger.create({
             trigger: thisSection,
+            pin: true,
             start: 'top center',
             end: 'bottom center',
             toggleClass: 'j-active',
             scrub: true,
-            snap: {
-                snapTo: 1 / 5
-            },
+            // snap: {
+            //     snapTo: 1 / 5
+            // },
             animation: sectionsTimeline,
             id: "section-" + i,
             onToggle: self => {
@@ -122,6 +139,6 @@ $(document).ready(function () {
             // containerAnimation: containerAnimation,
         });
 
-    })
+    })*/
 
 });

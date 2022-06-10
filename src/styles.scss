@@ -23,11 +23,16 @@ a {
   overflow: hidden;
   background: var(--bg-color);
   position: relative;
-
-
   --section-nx-1: #2C225C;
-
   background: #2C225C;
+
+  // &:not(.j-active) & {}
+
+  .j-active {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 
   &-wrap {
     overflow: auto;
@@ -69,17 +74,6 @@ a {
     height: 1278px;
     left: -462px;
     top: -397px;
-  }
-
-  &:not(.j-active) & {
-    &-graphics {
-      top: -547px;
-      left: -342px;
-      transform: scale(0.6);
-    }
-    &-btn {
-      bottom: -50px;
-    }
   }
 
   &-graphics {
