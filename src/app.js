@@ -10,7 +10,7 @@ ScrollTrigger.defaults({
 $(document).ready(function () {
     const $canvas = $('.sections');
     const canvas = $canvas[0];
-    const canvasTimeline = gsap.timeline({paused: true});
+    const canvasAnimation = gsap.timeline({paused: false});
 
     const circle = $('#sections-graphics')[0];
     const sectionsButton = $('#sections-btn')[0];
@@ -28,16 +28,24 @@ $(document).ready(function () {
 
     ScrollTrigger.create({
         id: 'canvas',
+        pin: true,
         trigger: canvas,
         start: 'top top',
+        scrub: true,
         end: 'bottom bottom',
         toggleClass: 'j-active',
+        animation: canvasAnimation,
         onToggle: self => {
             const {direction, isActive, progress} = self;
             // console.log('CanvasonToggle',direction, isActive, progress, self);
             toggle_nav(isActive);
         }
-    })
+    });
+
+    canvasAnimation
+        .to(circle, {scale: 1, duration: 0.3, ease: 'ease-in-out'})
+        .to(sectionsButton, {bottom: 20, duration: 0.1, ease: 'ease-in-out'} )
+
 
 
     const $sections = $('#sections');
