@@ -7,43 +7,35 @@
     <script type="module" src="app.js"></script>
 </head>
 <body>
-<div style="height: 900px"></div>
 
-<include src="test-include.html" locals='{"text": "Button"}'></include>
+<include src="test-include.html" locals='{"px": "900"}'></include>
 
-<div id="sections-scroller">
-    <section class="sections" id="sections">
-        <div id="sections-pin">
-            <div id="sections-nav" class="sections-nav">
-                <each loop="index in [1,2,3,4,5,6]">
-                    <button data-target="#section__{{ index }}" class="sections-nav-button">{{index}}</button>
-                </each>
-            </div>
-            <div id="sections-graphics" class="sections-graphics"></div>
-            <a class="btn sections-btn" id="sections-btn" href="#">BUTTON HERE</a>
-        </div>
-        <div class="sections-wrap" id="sections-wrap">
-
+<section class="sections" id="sections">
+    <div id="sections-pin" class="sections-pin">
+        <div id="sections-nav" class="sections-nav">
             <each loop="index in [1,2,3,4,5,6]">
-                <div class="section" id="section__{{ index }}">
-                    <div class="section-wrap">
-                        <div class="section-content">
-                            <div class="section-content-item section-content-item__left">SECTION 1</div>
-                            <div class="section-content-item section-content-item__right">
-                                <div class="section-content-item-card section-content-item-card__1">CARD 1</div>
-                                <div class="section-content-item-card section-content-item-card__2" hidden>CARD 2</div>
-                            </div>
-                        </div>
+                <button data-target="#section__{{ index }}" class="sections-nav-button">{{index}}</button>
+            </each>
+        </div>
+        <div id="sections-graphics" class="sections-graphics"></div>
+        <a class="btn sections-btn" id="sections-btn" href="#">BUTTON HERE</a>
+    </div>
+    <each loop="index in [1,2,3,4,5,6]">
+        <div class="section section__{{index}}" id="section__{{ index }}">
+            <div class="section-wrap">
+                <div class="section-content">
+                    <div class="section-content-item section-content-item__left">SECTION 1</div>
+                    <div class="section-content-item section-content-item__right">
+                        <div class="section-content-item-card section-content-item-card__1">CARD 1</div>
+                        <div class="section-content-item-card section-content-item-card__2" hidden>CARD 2</div>
                     </div>
                 </div>
-            </each>
-
+            </div>
         </div>
-    </section>
-</div>
+    </each>
+</section>
 
+<include src="test-include.html" locals='{"px": "1500"}'></include>
 <div id="whitelist" class="j-active"></div>
-
-<div style="height: 900px"></div>
 </body>
 </html>

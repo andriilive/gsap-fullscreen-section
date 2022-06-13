@@ -16,129 +16,82 @@ $(document).ready(function () {
     const $circle = $('#sections-graphics');
     const circle = $circle[0];
 
-    $canvas.css({'--bg-color': '#000'}).data('sections', sections.length);
-
-    // Defaults
-    function set_defaults() {
-        // gsap.set(sectionsButton, {autoAlpha: 0, y: 500});
-        // gsap.set(circle, {autoAlpha: 0, scale: 0});
-    }
-
-    set_defaults();
+    // $canvas.css({'--bg-color': '#000'}).data('sections', sections.length);
 
     ScrollTrigger.defaults({
         markers: true
     });
 
-    const CanvasAnimation = gsap.timeline({paused: true});
-    const SectionAnimation = gsap.timeline({paused: true});
+    function go_to_section(i) {
+        // console.log(sections[i].id)
+        // gsap.to(window, {duration: 2, scrollTo: '#' + sections[i].id});
+    }
 
-    gsap.set(circle, {});
+    go_to_section(0);
 
-    CanvasAnimation
-        .to('body', {overflow: 'hidden'})
-        .to({circle},{y: -547, x: -342, scale: 0.6, duration: 0})
+    $canvas.css({'--bg-color': ' #2C225C'}).data('sections', sections.length);
+
+    let canvasAnimation = gsap.timeline({paused: true});
+
+    canvasAnimation
+        .to('body', {overflow: 'hidden', duration: 0.3})
+        .to('#sections-graphics', {width: 1278, height: 1278, top: -397, left: -462, opacity: 1, duration: 0.4})
+        .to('#sections-btn', {bottom: 40})
+        .to('body', {overflow: 'auto'});
+
+    function canvasAnimationReset() {
+        gsap.set('#sections-btn', {bottom: -100});
+        gsap.set(sections, {display: 'none'})
+        gsap.set(sections[0], {display: 'block'})
+        gsap.set('#sections-graphics', {width: 771, height: 771, top: -547, left: -337, opacity: 0});
+    }
+
+    function canvasAnimationPlay() {
+        gsap.to('#sections-btn', {bottom: 20, duration: 0.1});
+        canvasAnimation.play();
+    }
+
+    canvasAnimationReset();
 
     ScrollTrigger.create({
         trigger: canvas,
         start: 'top top',
         end: 'bottom bottom',
-        toggleClass: 'j-active',
         scrub: true,
-        markers: true,
-        id: "sections",
-        onToggle: self => {
-            console.log('canvasOnToggle', self.isActive)
-        },
-        onUpdate: self => {
-            const {progress} = self;
-        },
-
-        /*top: -547px;
-        left: -342px;
-        transform: scale(0.6);*/
-
-        onEnter: self => {
-
-        }
+        pin: canvas,
+        id: 'canvas',
+        toggleClass: 'j-active',
+        animation: canvasAnimation,
     });
 
-    sections.forEach(function (thisSection, i){
+    sections.forEach(function (thisSection, i) {
 
-    });
+        let thisSectionAnimation = gsap.timeline();
+        const thisSectionContent = thisSection.querySelector('.section-content');
 
-    /*sections.forEach(function (thisSection, i) {
-        console.log(i, thisSection, thisSection.nextElementSibling);
+        gsap.set(thisSectionContent, {autoAlpha: 0})
+        // thisSectionAnimation.to(thisSectionContent, {opacity: 1, duration: 300})
 
-        // gsap.set(thisSection, {height: '250vh'});
-
-        // let anim = gsap.timeline();
-        //
-        // ScrollTrigger.create({
-        //     trigger: thisSection,
-        //     pin: thisSection,
-        //     start: 'top top',
-        //     end: 'bottom bottom',
-        //     scrub: 0,
-        //     animation: anim
-        // });
-        //
-        // anim.to(thisSection, {autoAlpha: 0});
-
-        const sectionsTimeline = gsap.timeline(/!*{paused: true}*!/);
-
-        const sectionsScrollTrigger = ScrollTrigger.create({
-            trigger: thisSection,
-            pin: true,
-            start: 'top center',
-            end: 'bottom center',
-            toggleClass: 'j-active',
-            scrub: true,
-            // snap: {
-            //     snapTo: 1 / 5
-            // },
-            animation: sectionsTimeline,
-            id: "section-" + i,
-            onToggle: self => {
-
-                const {isActive, direction} = self;
-                const $circle = $(circle);
-
-                if (isActive) {
-                    window.activeSection = i + 1;
-                    // if true -> to right || if false <- to left
-                    if (activeSection % 2 === 0) {
-
-                    } else {
-                        // sectionsTimeline.to(circle, {x: '100%'})
-                    }
-                }
-
-                sectionsTimeline.fromTo(circle, {x: 0}, {x: '100%'});
-
-
-                // 1 | 1
-
-                // console.log('sectionOnToggle', self, circleDirection)
-            },
-            onUpdate: self => {
-                const {progress} = self;
-                // console.log('sectionProgress', progress)
-            },
-        });
+        thisSectionAnimation.to(thisSectionContent, {autoAlpha: 1, duration: 0.2})
 
         ScrollTrigger.create({
-            target: thisSection,
-            id: "section-" + i,
+            trigger: thisSection,
+            id: 'section-' + i,
             pin: true,
-            top: 'top top',
-            start: 'top bottom',
-            onEnter: self => {
-
+            toggleClass: 'j-section-active',
+            start: 'top top',
+            end: 'top top',
+            scrub: true,
+            animation: thisSectionAnimation,
+            onUpdate: self => {
+                console.log(self.progress, self.direction);
             }
-            // containerAnimation: containerAnimation,
         });
 
-    })*/
+
+        ScrollTrigger.create({
+
+        });
+    });
 
 });

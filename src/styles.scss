@@ -19,20 +19,18 @@ a {
 }
 
 .sections {
-  --transition-duration: 1s;
-  overflow: hidden;
   background: var(--bg-color);
   position: relative;
-  --section-nx-1: #2C225C;
-  background: #2C225C;
 
   // &:not(.j-active) & {}
 
-  .j-active {
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
+  //&-pin {
+  //  overflow: hidden;
+  //  height: 100%;
+  //  width: 100%;
+  //  display: block;
+  //  position: absolute;
+  //}
 
   &-wrap {
     overflow: auto;
@@ -53,7 +51,6 @@ a {
     color: var(--color, black);
     padding: 0.9rem 1.2rem;
     position: fixed;
-    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
   }
@@ -79,17 +76,10 @@ a {
   &-graphics {
     z-index: 0;
     transition-timing-function: ease-in-out;
-    --transtion-duration: 1800ms;
-    --size: 1278px;
-    --y-move: -462px;
 
     @extend .transition;
-    width: var(--size);
-    height: var(--size);
     background: #fff;
     border-radius: 100%;
-    top: -397px;
-    left: var(--y-move);
     position: absolute;
 
     background: radial-gradient(57.82% 57.82% at 82.47% 82.9%, rgba(0, 234, 205, 0.21) 0%, rgba(143, 93, 231, 0.11) 66.15%, rgba(44, 34, 92, 0) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
@@ -97,7 +87,8 @@ a {
 }
 
 .section {
-   height: 100vh;
+  min-height: 100vh;
+  // display: block;
   border-bottom: 1px dashed rgba(225, 225, 225, 0.18);
 
   &-wrap {
