@@ -10,7 +10,7 @@ ScrollTrigger.defaults({
 $(document).ready(function () {
     const $canvas = $('.sections');
     const canvas = $canvas[0];
-    const canvasAnimation = gsap.timeline({paused: false});
+    const canvasAnimation = gsap.timeline({paused: true});
 
     const circle = $('#sections-graphics')[0];
     const sectionsButton = $('#sections-btn')[0];
@@ -34,19 +34,25 @@ $(document).ready(function () {
         scrub: true,
         end: 'bottom bottom',
         toggleClass: 'j-active',
-        animation: canvasAnimation,
         onToggle: self => {
             const {direction, isActive, progress} = self;
             // console.log('CanvasonToggle',direction, isActive, progress, self);
+
+            if (isActive) {
+                canvasAnimation
+                    .to(circle, {scale: 1, duration: 0.3, ease: 'ease-in-out'})
+                    .to(sectionsButton, {bottom: 20, duration: 0.1, ease: 'ease-in-out'} )
+            } else {
+                canvasAnimation
+                    .to(circle, {scale: 0.7, duration: 0.3, ease: 'ease-in-out'})
+                    .to(sectionsButton, {bottom: -100, duration: 0.1, ease: 'ease-in-out'} )
+            }
+
+            canvasAnimation.play()
+
             toggle_nav(isActive);
         }
     });
-
-    canvasAnimation
-        .to(circle, {scale: 1, duration: 0.3, ease: 'ease-in-out'})
-        .to(sectionsButton, {bottom: 20, duration: 0.1, ease: 'ease-in-out'} )
-
-
 
     const $sections = $('#sections');
     const sections = gsap.utils.toArray('.section');
