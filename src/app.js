@@ -4,6 +4,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const scenes = gsap.utils.toArray(".scene");
 
+ScrollTrigger.defaults({
+    markers: true
+})
+
 // Pinned scene
 scenes.forEach((scene, i) => {
 
