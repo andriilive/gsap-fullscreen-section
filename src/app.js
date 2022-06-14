@@ -1,56 +1,123 @@
-import $ from 'jquery'
-import {gsap, ScrollTrigger, Observer, ScrollToPlugin, CSSPlugin} from "gsap/all";
+import {gsap, ScrollTrigger} from "gsap/all";
 
-gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin, CSSPlugin);
+gsap.registerPlugin(ScrollTrigger);
 
-ScrollTrigger.defaults({
-    markers: true
-});
+const scenes = gsap.utils.toArray(".scene");
 
-$(document).ready(function () {
-    const $canvas = $('.sections');
-    const canvas = $canvas[0];
-    const canvasAnimation = gsap.timeline({paused: false});
-
-    const circle = $('#sections-graphics')[0];
-    const sectionsButton = $('#sections-btn')[0];
-
-    function toggle_nav(state) {
-        if (state) {
-            console.log('enable navbar');
-        } else {
-            console.log('disable navbar');
-        }
-    }
-
-    gsap.set(sectionsButton, {bottom: -100});
-    gsap.set(circle, {scale: 0.7});
+// Pinned scene
+scenes.forEach((scene, i) => {
 
     ScrollTrigger.create({
-        id: 'canvas',
-        pin: true,
-        trigger: canvas,
-        start: 'top top',
+        trigger: scene,
         scrub: true,
-        end: 'bottom bottom',
-        toggleClass: 'j-active',
-        animation: canvasAnimation,
-        onToggle: self => {
-            const {direction, isActive, progress} = self;
-            // console.log('CanvasonToggle',direction, isActive, progress, self);
-            toggle_nav(isActive);
+        pin: true,
+        id: `scene-${i}`,
+        start: 'top top',
+        end: "+=100%",
+        //    snap: {
+        //      snapTo: 1,
+        //      duration: { min: 0.2, max: 1 },
+        //      delay: 0.1
+        //    },
+    });
+
+
+    const tl = gsap.timeline();
+
+    const container = scene.querySelector(".container");
+
+    const title = scene.querySelector("h1");
+
+    tl.from(title, {
+        y: 20,
+        opacity: 0,
+        // transformOrigin: "50% 50%",
+        duration: 1000,
+        // delay: 5,
+        scrollTrigger: {
+            start: "top 40%",
+            end: "top 30%",
+            trigger: title,
+            scrub: true,
+            //     id: `container-${i}`
+            markers: false
         }
     });
 
-    canvasAnimation
-        .to(circle, {scale: 1, duration: 0.3, ease: 'ease-in-out'})
-        .to(sectionsButton, {bottom: 20, duration: 0.1, ease: 'ease-in-out'} )
+    const inner = scene.querySelector(".inner");
 
+    tl.to(inner, {
+        y: -150,
+        opacity: 0,
+        // transformOrigin: "50% 50%",
+        duration: 1000,
+        // delay: 5,
+        scrollTrigger: {
+            start: "top 20%",
+            end: "top 10%",
+            trigger: title,
+            scrub: true,
+            //     id: `container-${i}`
+            markers: true
+        }
+    })
 
+    const card = scene.querySelector(".card");
 
-    const $sections = $('#sections');
-    const sections = gsap.utils.toArray('.section');
-    const sectionsTimeline = gsap.timeline();
+    tl.from(card, {
+        y: 150,
+        opacity: 0,
+        // transformOrigin: "50% 50%",
+        duration: 1000,
+        // delay: 5,
+        scrollTrigger: {
+            start: "top 20%",
+            end: "top 10%",
+            trigger: title,
+            scrub: true,
+            //     id: `container-${i}`
+            markers: false
+        }
+    })
 
-    $sections.css({'--bg-color': '#000'}).data('sections', sections.length);
 });
+
+function getScrollPercent() {
+    var h = document.documentElement,
+        b = document.body,
+        st = 'scrollTop',
+        sh = 'scrollHeight';
+    return (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
+}
+
+const circle = document.getElementById('circle');
+
+const handleScroll = () => {
+    const prc = getScrollPercent();
+    console.log(prc);
+
+    switch (true) {
+        case prc > 60:
+            circle.style.top = '60%';
+            circle.style.left = '60%';
+            break;
+        case prc > 30:
+            circle.style.top = '-10%';
+            circle.style.left = '70%';
+            break;
+        default:
+            circle.style.top = '-40%';
+            circle.style.left = '-30%';
+            break;
+    }
+};
+
+window.addEventListener('scroll', handleScroll);
+
+
+//
+// ScrollTrigger.create({
+//     start: 0,
+//     end: "max",
+//     snap: 1 / (scenes.length * 2 - 1)
+// });

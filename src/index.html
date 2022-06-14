@@ -1,44 +1,69 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>GSAP Animation</title>
-    <link rel="stylesheet" href="styles.scss" />
+    <link rel="stylesheet" href="styles.scss"/>
     <script type="module" src="app.js"></script>
 </head>
 <body>
-<div style="height: 900px"></div>
 
-<include src="test-include.html" locals='{"text": "Button"}'></include>
+<div id="scenes" style="padding-top:100vh2;">
 
-<section class="sections" id="sections">
-    <div id="sections-nav" class="sections-nav">
-        <each loop="index in [1,2,3,4,5,6]">
-            <button data-target="#section__{{ index }}" class="sections-nav-button">{{index}}</button>
-        </each>
-    </div>
-    <div id="sections-graphics" class="sections-graphics"></div>
-    <div class="sections-wrap">
+    <div id="circle"></div>
 
-        <each loop="index in [1,2,3,4,5,6]">
-            <div class="section" id="section__{{ index }}">
-                <div class="section-wrap">
-                    <div class="section-content">
-                        <div class="section-content-item section-content-item__left">SECTION {{index}}</div>
-                        <div class="section-content-item section-content-item__right">
-                            <div class="section-content-item-card section-content-item-card__1">CARD 1</div>
-                            <div class="section-content-item-card section-content-item-card__2" hidden>CARD 2</div>
-                        </div>
-                    </div>
-                </div>
+    <div class="scene">
+        <header>
+            <h1>
+                This is a title
+            </h1>
+        </header>
+
+        <div class="body">
+            <div class="inner">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque cupiditate molestias nihil recusandae rem! A ab, eligendi esse eum excepturi facilis nesciunt perferendis quas, quisquam ullam ut vel velit voluptatum!</p>
             </div>
-        </each>
-
+            <div class="card">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium amet deserunt dicta doloremque facere impedit ipsa iure minus provident reprehenderit. Ad aspernatur beatae consequatur dicta dignissimos eligendi fuga id laborum nesciunt perspiciatis quia quidem, quos tenetur. Animi minus tempore ullam.
+            </div>
+        </div>
     </div>
-    <a class="btn" id="sections-btn" href="#">BUTTON HERE</a>
-</section>
 
+    <div class="scene">
+        <header>
+            <h1>
+                This is a title
+            </h1>
+        </header>
 
-<div style="height: 900px"></div>
+        <div class="body">
+            <div class="inner">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque cupiditate molestias nihil recusandae rem! A ab, eligendi esse eum excepturi facilis nesciunt perferendis quas, quisquam ullam ut vel velit voluptatum!</p>
+            </div>
+            <div class="card">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium amet deserunt dicta doloremque facere impedit ipsa iure minus provident reprehenderit. Ad aspernatur beatae consequatur dicta dignissimos eligendi fuga id laborum nesciunt perspiciatis quia quidem, quos tenetur. Animi minus tempore ullam.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="scene">
+        <header>
+            <h1>
+                This is a title
+            </h1>
+        </header>
+
+        <div class="body">
+            <div class="inner">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque cupiditate molestias nihil recusandae rem! A ab, eligendi esse eum excepturi facilis nesciunt perferendis quas, quisquam ullam ut vel velit voluptatum!</p>
+            </div>
+            <div class="card">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium amet deserunt dicta doloremque facere impedit ipsa iure minus provident reprehenderit. Ad aspernatur beatae consequatur dicta dignissimos eligendi fuga id laborum nesciunt perspiciatis quia quidem, quos tenetur. Animi minus tempore ullam.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 </body>
 </html>
