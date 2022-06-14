@@ -33,6 +33,7 @@ a {
     width: 1220px;
     height: 1220px;
     background: #fff;
+    opacity: 0.2;
     border-radius: 100%;
     top: -400px;
     left: -500px;
@@ -93,4 +94,8 @@ a {
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+#sections-nav {
+  z-index: 10;
 }
