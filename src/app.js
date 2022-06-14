@@ -4,19 +4,18 @@ import {gsap, ScrollTrigger, Observer, ScrollToPlugin, CSSPlugin} from "gsap/all
 gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin, CSSPlugin);
 
 ScrollTrigger.defaults({
-    markers: true
+    markers: false
 });
 
 let randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
 
 $(document).ready(function (e) {
 
+    window.activeSection = 1;
+
     $('.sections-nav-button').click(function () {
         const $this = $(this);
         let target = $this.data('target');
-
-        console.log(target)
-
         switch_section(target);
 
     });
@@ -40,7 +39,6 @@ $(document).ready(function (e) {
         }
     }
 
-    $canvas.data('sections', sections.length);
     gsap.to(canvas, {background: randomColor});
 
     gsap.to($sections.not(':first-of-type').find('.section-content').toArray(), {autoAlpha: 0});
@@ -51,8 +49,8 @@ $(document).ready(function (e) {
     }
 
     const buttonAnimationValues = {
-        true: {bottom: 20, duration: 0.1, ease: 'ease-in-out'},
-        false: {bottom: -100, duration: 0.1, ease: 'ease-in-out'},
+        true: {bottom: 40, duration: 0.15, ease: 'ease-in-out'},
+        false: {bottom: -100, duration: 0.15, ease: 'ease-in-out'},
     }
 
     function animate_canvas_elements(isActive) {
@@ -60,6 +58,10 @@ $(document).ready(function (e) {
             .to(circle, circleAnimationValues[isActive])
             .to(sectionsButton, buttonAnimationValues[isActive])
             .play()
+    }
+
+    function move_circle(direction) {
+
     }
 
     function switch_section(i) {
@@ -70,11 +72,17 @@ $(document).ready(function (e) {
         gsap.to('.section-content', {autoAlpha: 0});
         gsap.to(section.querySelector('.section-content'), {autoAlpha: 1});
         gsap.to(canvas, {background: randomColor});
+        window.activeSection = i;
+
+        if ( window.activeSection % 2 !== 0) {
+            console.log('odd');
+        } else {
+            console.log('even');
+        }
+
     }
 
     const bodyAnimation = gsap.timeline();
-
-    console.log(sections.length)
 
     animate_canvas_elements(false);
 
@@ -88,7 +96,7 @@ $(document).ready(function (e) {
         scrub: true,
         pin: true,
         pinSpacing: true,
-        end: `+=${sections.length * 100}% bottom`,
+        end: `+=${sections.length * 100 * 2}% bottom`,
         toggleClass: 'j-active',
         onUpdate: self => {
             let {progress} = self;
