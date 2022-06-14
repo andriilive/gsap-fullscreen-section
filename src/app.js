@@ -12,6 +12,10 @@ $(document).ready(function () {
     const canvas = $canvas[0];
     const canvasAnimation = gsap.timeline({paused: true});
 
+    const $sections = $('.section');
+    const sections = $sections.toArray();
+    $($sections[0]).addClass('j-active');
+
     const circle = $('#sections-graphics')[0];
     const sectionsButton = $('#sections-btn')[0];
 
@@ -28,12 +32,14 @@ $(document).ready(function () {
 
     ScrollTrigger.create({
         id: 'canvas',
-        pin: true,
         trigger: canvas,
         start: 'top top',
         scrub: true,
         end: 'bottom bottom',
         toggleClass: 'j-active',
+        snap: {
+            snapTo: 1 / (sections.length + 1)
+        },
         onToggle: self => {
             const {direction, isActive, progress} = self;
             // console.log('CanvasonToggle',direction, isActive, progress, self);
@@ -54,9 +60,28 @@ $(document).ready(function () {
         }
     });
 
-    const $sections = $('#sections');
-    const sections = gsap.utils.toArray('.section');
-    const sectionsTimeline = gsap.timeline();
+    // const sections = $sections.toArray();
+    // const sectionsTimeline = gsap.timeline();
 
-    $sections.css({'--bg-color': '#000'}).data('sections', sections.length);
+    // sections.forEach(function (thisSection, i) {
+    //
+    //     ScrollTrigger.create({
+    //         id: 'section-' + i,
+    //         trigger: thisSection,
+    //         start: 'top top',
+    //         pinnedContainer: canvas,
+    //         scrub: true,
+    //         snap: {
+    //             snapTo: [0,1]
+    //         },
+    //         end: 'bottom bottom',
+    //         toggleClass: 'j-active',
+    //         onUpdate: self => {
+    //             console.log('onToggle section-' + i, self)
+    //         }
+    //     })
+    //
+    // });
+
+    $canvas.css({'--bg-color': '#000'}).data('sections', sections.length);
 });

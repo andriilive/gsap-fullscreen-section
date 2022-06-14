@@ -32,7 +32,7 @@ a {
   &-graphics {
     width: 1220px;
     height: 1220px;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 100%;
     top: -400px;
     left: -500px;
@@ -42,6 +42,12 @@ a {
 
 .section {
   height: 100vh;
+
+  display: none;
+
+  &.j-active {
+    display: block;
+  }
 
   border-bottom: 1px dashed rgba(225, 225, 225, 0.18);
 
