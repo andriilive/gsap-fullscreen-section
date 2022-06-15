@@ -7,7 +7,7 @@ ScrollTrigger.defaults({
     markers: false
 });
 
-let randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+let randomColor = () => '#' + Math.floor(Math.random()*16777215).toString(16);
 
 $(document).ready(function (e) {
 
@@ -54,14 +54,32 @@ $(document).ready(function (e) {
     }
 
     function animate_canvas_elements(isActive) {
+
         canvasAnimation
             .to(circle, circleAnimationValues[isActive])
             .to(sectionsButton, buttonAnimationValues[isActive])
             .play()
     }
 
+    const duration = 1.8;
+    let circlePositionVars = {left: -400, top: -500, duration: duration};
+    gsap.to(circle, {left: -400, top: -500, duration: 0});
+
     function move_circle(direction) {
 
+        gsap.to(circle, {background: randomColor});
+        let vars = {};
+
+        console.log('move circle to odd? true -> left || false -> right', direction)
+
+        if (direction) {
+            // to left
+            gsap.to(circle, vars);
+        } else {
+            // to right
+            circlePositionVars = {left: 'unset', right: -400, top: -500, duration: duration};
+            gsap.to(circle, circlePositionVars);
+        }
     }
 
     function switch_section(i) {
@@ -71,14 +89,11 @@ $(document).ready(function (e) {
         $section.show();
         gsap.to('.section-content', {autoAlpha: 0});
         gsap.to(section.querySelector('.section-content'), {autoAlpha: 1});
-        gsap.to(canvas, {background: randomColor});
+        gsap.to(canvas, {background: randomColor, duration: 1});
         window.activeSection = i;
 
-        if ( window.activeSection % 2 !== 0) {
-            console.log('odd');
-        } else {
-            console.log('even');
-        }
+        let odd = window.activeSection % 2 !== 0;
+        move_circle(odd);
 
     }
 
@@ -87,7 +102,6 @@ $(document).ready(function (e) {
     animate_canvas_elements(false);
 
     $sections.not(':first-of-type').hide();
-
 
     ScrollTrigger.create({
         id: 'canvas',
@@ -101,18 +115,31 @@ $(document).ready(function (e) {
         onUpdate: self => {
             let {progress} = self;
             progress = Math.round(progress * 100);
-            console.log(progress);
 
-            if (progress === 25) {
+            let i = 6;
+            let x = 100 / i;
+            let y = [];
+
+            for (let j = 0; j <= i; j++) {
+                y.push(j * x);
+            }
+
+            console.log(y);
+
+            if (progress === 0) {
                 switch_section(1);
             }
 
-            if (progress === 50) {
+            if (progress === 25) {
                 switch_section(2);
             }
 
-            if (progress === 75) {
+            if (progress === 50) {
                 switch_section(3);
+            }
+
+            if (progress === 75) {
+                switch_section(4);
             }
 
         },
@@ -122,11 +149,11 @@ $(document).ready(function (e) {
         //     delay: 0.0000001
         // },
         onSnapComplete: self => {
-            console.log('canvas onSnapComplete', self);
+            // console.log('canvas onSnapComplete', self);
         },
         onToggle: self => {
             const {direction, isActive, progress} = self;
-            console.log('canvas onToggle',direction, isActive, progress, self);
+            // console.log('canvas onToggle',direction, isActive, progress, self);
             toggle_nav(isActive);
             animate_canvas_elements(isActive)
         }
