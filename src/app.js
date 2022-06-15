@@ -17,7 +17,6 @@ $(document).ready(function (e) {
         const $this = $(this);
         let target = $this.data('target');
         switch_section(target);
-
     });
 
     const $canvas = $('.sections');
@@ -41,7 +40,7 @@ $(document).ready(function (e) {
 
     gsap.to(canvas, {background: randomColor});
 
-    gsap.to($sections.not(':first-of-type').find('.section-content').toArray(), {autoAlpha: 0});
+    gsap.to($sections.not(':first-of-type').find('.section-content').toArray(), {autoAlpha: 0, y: 500});
 
     const circleAnimationValues = {
         true: {scale: 1, duration: 0.3, ease: 'ease-in-out'},
@@ -54,7 +53,6 @@ $(document).ready(function (e) {
     }
 
     function animate_canvas_elements(isActive) {
-
         canvasAnimation
             .to(circle, circleAnimationValues[isActive])
             .to(sectionsButton, buttonAnimationValues[isActive])
@@ -68,27 +66,25 @@ $(document).ready(function (e) {
     function move_circle(direction) {
 
         gsap.to(circle, {background: randomColor});
-        let vars = {};
-
         console.log('move circle to odd? true -> left || false -> right', direction)
 
-        if (direction) {
-            // to left
-            gsap.to(circle, vars);
-        } else {
-            // to right
+        if (!direction) {
             circlePositionVars = {left: 'unset', right: -400, top: -500, duration: duration};
-            gsap.to(circle, circlePositionVars);
         }
+
+        gsap.to(circle, circlePositionVars);
     }
 
     function switch_section(i) {
+
+        // console.log(i);
+
         $sections.hide();
-        const $section = $($sections[i -1]);
+        const $section = $($sections[i]);
         const section = $section[0];
         $section.show();
-        gsap.to('.section-content', {autoAlpha: 0});
-        gsap.to(section.querySelector('.section-content'), {autoAlpha: 1});
+        gsap.to('.section-content', {autoAlpha: 0, y: 500});
+        gsap.to(section.querySelector('.section-content'), {autoAlpha: 1, y: 0});
         gsap.to(canvas, {background: randomColor, duration: 1});
         window.activeSection = i;
 
@@ -96,6 +92,40 @@ $(document).ready(function (e) {
         move_circle(odd);
 
     }
+
+    function switch_section_content(i) {
+        console.log(i);
+
+        const sectionContent1 = sections[i].querySelector('.section-content-item-card__1');
+        const sectionContent2 = sections[i].querySelector('.section-content-item-card__2');
+
+        console.log($sections.data('content'),'$sections.data(\'content\')');
+
+        if ( $(sections[i]).data('content') === 1 ) {
+            gsap.to(sectionContent1, {autoAlpha: 0, display: 'none', duration: 0.1})
+            gsap.to(sectionContent2, {autoAlpha: 1, display: 'block', duration: 0.1})
+            $(sections[i]).data('content', 2);
+        } else {
+            gsap.to(sectionContent2, {autoAlpha: 0, display: 'none', duration: 0.1})
+            gsap.to(sectionContent1, {autoAlpha: 1, display: 'block', duration: 0.1})
+            $(sections[i]).data('content', 1);
+        }
+    }
+
+    let sectionsChunks = [];
+    let scrollPart = (sections.length - 1) * 2 + 2;
+
+    for (let j = 0; j <= scrollPart; j++) {
+        sectionsChunks.push([j * (100 / scrollPart), (j === 0 || j % 2 === 0) && j / 2]);
+    }
+
+    sectionsChunks.pop();
+
+    console.log(sectionsChunks);
+
+    sectionsChunks.forEach(function (value, index){
+        console.log(value);
+    });
 
     const bodyAnimation = gsap.timeline();
 
@@ -116,32 +146,16 @@ $(document).ready(function (e) {
             let {progress} = self;
             progress = Math.round(progress * 100);
 
-            let i = 6;
-            let x = 100 / i;
-            let y = [];
+            sectionsChunks.forEach(function (value, index){
+                if (progress === Math.round(value[0])) {
 
-            for (let j = 0; j <= i; j++) {
-                y.push(j * x);
-            }
-
-            console.log(y);
-
-            if (progress === 0) {
-                switch_section(1);
-            }
-
-            if (progress === 25) {
-                switch_section(2);
-            }
-
-            if (progress === 50) {
-                switch_section(3);
-            }
-
-            if (progress === 75) {
-                switch_section(4);
-            }
-
+                    if (value[1] !== false) {
+                        switch_section(value[1]);
+                    } else {
+                        switch_section_content(sectionsChunks[index - 1][1]);
+                    }
+                }
+            });
         },
         // snap: {
         //   snapTo: [0, 0.25, 0.5, 0.75, 1],
