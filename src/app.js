@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import {gsap, ScrollTrigger, Observer, ScrollToPlugin, CSSPlugin} from "gsap/all";
+import {gsap, ScrollTrigger, Observer, ScrollToPlugin, CSSPlugin, Power2} from "gsap/all";
 
 gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin, CSSPlugin);
 
@@ -46,13 +46,13 @@ $(document).ready(function (e) {
     gsap.to(canvas, {background: randomColor});
 
     const circleAnimationValues = {
-        true: {scale: 1, duration: 0.3, ease: 'ease-in-out'},
-        false: {scale: 0.7, duration: 0.3, ease: 'ease-in-out'},
+        true: {scale: 1, duration: 0.3, ease: Power2.easeOut},
+        false: {scale: 0.7, duration: 0.3, ease: Power2.easeOut},
     }
 
     const buttonAnimationValues = {
-        true: {bottom: 40, duration: 0.15, ease: 'ease-in-out'},
-        false: {bottom: -100, duration: 0.15, ease: 'ease-in-out'},
+        true: {bottom: 40, duration: 0.15, ease: Power2.easeOut},
+        false: {bottom: -100, duration: 0.15, ease: Power2.easeOut},
     }
 
     function animate_canvas_elements(isActive) {
@@ -63,14 +63,14 @@ $(document).ready(function (e) {
     }
 
     // Titles 0
-    const TitlesAnimationDuration = 0.3;
-    const TitlesAnimationVars = {autoAlpha: 0, y: -150, duration: TitlesAnimationDuration};
+    const TitlesAnimationDuration = 0.6;
+    const TitlesAnimationVars = {autoAlpha: 0, y: -150, duration: TitlesAnimationDuration, ease: Power2.easeOut};
     gsap.to($sections.not(':first-of-type').find('.section-content-item__left').toArray(), TitlesAnimationVars);
 
     const CircleMoveDuration = 1.8;
 
     function circle_to_left() {
-        gsap.to(circle, {x: -400, top: -500, duration: CircleMoveDuration});
+        gsap.to(circle, {x: -400, top: -500, duration: CircleMoveDuration, ease: Power2.easeOut});
     }
 
     circle_to_left();
@@ -84,14 +84,14 @@ $(document).ready(function (e) {
         const section = $section[0];
         $section.show();
         gsap.to('.section-content-item__left', TitlesAnimationVars);
-        gsap.to(section.querySelector('.section-content-item__left'), {y: 0,autoAlpha: 1, duration: TitlesAnimationDuration});
-        gsap.to(canvas, {background: randomColor, duration: 1});
+        gsap.to(section.querySelector('.section-content-item__left'), {y: 0,autoAlpha: 1, duration: TitlesAnimationDuration, ease: Power2.easeOut});
+        gsap.to(canvas, {background: randomColor, duration: 1, ease: Power2.easeOut});
         window.activeSection = i;
 
         let odd = window.activeSection % 2 !== 0;
 
         if (odd) {
-            gsap.to(circle, {x: '100%', duration: CircleMoveDuration});
+            gsap.to(circle, {x: '100%', duration: CircleMoveDuration, ease: Power2.easeOut});
         } else {
             circle_to_left()
         }
@@ -106,25 +106,22 @@ $(document).ready(function (e) {
     }
 
     const sectionCardAnimationDuration = 0.5;
-    gsap.to($sections.find('.section-content-item-card__1').toArray(), {y: 0, autoAlpha: 1, duration: sectionCardAnimationDuration});
-    gsap.to($sections.find('.section-content-item-card__2').toArray(), {y: 500, autoAlpha: 0, duration: sectionCardAnimationDuration});
+    gsap.to($sections.find('.section-content-item-card__1').toArray(), {y: 0, autoAlpha: 1, duration: sectionCardAnimationDuration, ease: Power2.easeOut});
+    gsap.to($sections.find('.section-content-item-card__2').toArray(), {y: 500, autoAlpha: 0, duration: sectionCardAnimationDuration, ease: Power2.easeOut});
 
-    function switch_section_content(i) {
+    function switch_section_content(i, scrollDirectionDown) {
         // console.log(i);
 
         const sectionContent1 = sections[i].querySelector('.section-content-item-card__1');
         const sectionContent2 = sections[i].querySelector('.section-content-item-card__2');
 
-        let isFistSectionVisible = $(sections[i]).attr('data-content') === '1';
-
-        if ( isFistSectionVisible ) {
-            gsap.to(sectionContent1, {autoAlpha: 0, y: -500, duration: sectionCardAnimationDuration});
-            gsap.to(sectionContent2, {autoAlpha: 1, y: 0, duration: sectionCardAnimationDuration, delay: 0.2});
+        if ( scrollDirectionDown ) {
+            gsap.to(sectionContent1, {autoAlpha: 0, y: -500, duration: sectionCardAnimationDuration, ease: Power2.easeOut});
+            gsap.to(sectionContent2, {autoAlpha: 1, y: 0, duration: sectionCardAnimationDuration, delay: 0.2, ease: Power2.easeOut});
         } else {
-            gsap.to(sectionContent2, {autoAlpha: 0, y: 500, duration: sectionCardAnimationDuration});
-            gsap.to(sectionContent1, {autoAlpha: 1, y: 0, duration: sectionCardAnimationDuration, delay: 0.2});
+            gsap.to(sectionContent2, {autoAlpha: 0, y: 500, duration: sectionCardAnimationDuration, ease: Power2.easeOut});
+            gsap.to(sectionContent1, {autoAlpha: 1, y: 0, duration: sectionCardAnimationDuration, delay: 0.2, ease: Power2.easeOut});
         }
-
         // console.log($(sections[i]).attr('data-content'))
     }
 
@@ -159,7 +156,7 @@ $(document).ready(function (e) {
         end: `+=${sections.length * 100 * 3.2}% bottom`,
         toggleClass: 'j-active',
         onUpdate: self => {
-            let {progress} = self;
+            let {progress, direction} = self;
 
             if (round(progress * 100) !== 0) {
                 progress = round(progress * 100);
@@ -176,10 +173,21 @@ $(document).ready(function (e) {
 
             sectionsChunks.forEach(function (value, index) {
                 if (progress === round(value[0])) {
+
+                    let scrollDirectionDown = (direction > 0);
+
                     if (value[1] === false) {
-                        switch_section_content(sectionsChunks[index - 1][1]);
+                        let switchToSectionCard = sectionsChunks[index - 1][1];
+                        switch_section_content(switchToSectionCard, scrollDirectionDown);
+
                     } else {
-                        switch_section(value[1]);
+                        let switchToSection = scrollDirectionDown ? value[1] : value[1] - 1;
+
+                        if ( switchToSection < 0 ) {
+                            return;
+                        }
+
+                        switch_section(switchToSection);
                     }
                 }
             });
