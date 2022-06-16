@@ -105,18 +105,25 @@ $(document).ready(function (e) {
         3: 1
     }
 
+    const sectionCardAnimationDuration = 0.5;
+    gsap.to($sections.find('.section-content-item-card__1').toArray(), {y: 0, autoAlpha: 1, duration: sectionCardAnimationDuration});
+    gsap.to($sections.find('.section-content-item-card__2').toArray(), {y: 500, autoAlpha: 0, duration: sectionCardAnimationDuration});
+
     function switch_section_content(i) {
         // console.log(i);
 
         const sectionContent1 = sections[i].querySelector('.section-content-item-card__1');
         const sectionContent2 = sections[i].querySelector('.section-content-item-card__2');
 
-        const duration = 0.3;
         let isFistSectionVisible = $(sections[i]).attr('data-content') === '1';
 
-        $(sectionContent1).attr('hidden', isFistSectionVisible);
-        $(sectionContent2).attr('hidden', !isFistSectionVisible);
-        $(sections[i]).attr('data-content', isFistSectionVisible ? '2' : '1');
+        if ( isFistSectionVisible ) {
+            gsap.to(sectionContent1, {autoAlpha: 0, y: -500, duration: sectionCardAnimationDuration});
+            gsap.to(sectionContent2, {autoAlpha: 1, y: 0, duration: sectionCardAnimationDuration, delay: 0.2});
+        } else {
+            gsap.to(sectionContent2, {autoAlpha: 0, y: 500, duration: sectionCardAnimationDuration});
+            gsap.to(sectionContent1, {autoAlpha: 1, y: 0, duration: sectionCardAnimationDuration, delay: 0.2});
+        }
 
         console.log($(sections[i]).attr('data-content'))
     }
@@ -151,7 +158,7 @@ $(document).ready(function (e) {
         scrub: 10,
         pin: true,
         pinSpacing: true,
-        end: `+=${sections.length * 100 * 2}% bottom`,
+        end: `+=${sections.length * 100 * 3}% bottom`,
         toggleClass: 'j-active',
         onUpdate: self => {
             let {progress} = self;
