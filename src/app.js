@@ -10,7 +10,7 @@ ScrollTrigger.defaults({
 let randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16);
 
 function round(value, precision) {
-    var multiplier = Math.pow(10, precision || 0);
+    let multiplier = Math.pow(10, precision || 0);
     return Math.round(value * multiplier) / multiplier;
 }
 
@@ -65,7 +65,7 @@ $(document).ready(function (e) {
     // Titles 0
     const TitlesAnimationDuration = 0.3;
     const TitlesAnimationVars = {autoAlpha: 0, y: -150, duration: TitlesAnimationDuration};
-    gsap.to($sections.not(':first-of-type').find('section-content-item__left').toArray(), TitlesAnimationVars);
+    gsap.to($sections.not(':first-of-type').find('.section-content-item__left').toArray(), TitlesAnimationVars);
 
     const CircleMoveDuration = 1.8;
 
@@ -125,23 +125,21 @@ $(document).ready(function (e) {
             gsap.to(sectionContent1, {autoAlpha: 1, y: 0, duration: sectionCardAnimationDuration, delay: 0.2});
         }
 
-        console.log($(sections[i]).attr('data-content'))
+        // console.log($(sections[i]).attr('data-content'))
     }
 
     let sectionsChunks = [];
-    let scrollPart = (sections.length - 1) * 2 + 2;
+    // let snapTo = [];
+    let scrollPart = (sections.length) * 2;
 
     for (let j = 0; j <= scrollPart; j++) {
         sectionsChunks.push([j * (100 / scrollPart), (j === 0 || j % 2 === 0) && j / 2]);
+        // snapTo.push( j * (100 / scrollPart / 100) )
     }
 
     sectionsChunks.pop();
-
-    console.log(sectionsChunks);
-
-    sectionsChunks.forEach(function (value, index) {
-        console.log(value);
-    });
+    // console.log(sectionsChunks);
+    // console.log(snapTo);
 
     const bodyAnimation = gsap.timeline();
 
@@ -158,7 +156,7 @@ $(document).ready(function (e) {
         scrub: 10,
         pin: true,
         pinSpacing: true,
-        end: `+=${sections.length * 100 * 3}% bottom`,
+        end: `+=${sections.length * 100 * 3.2}% bottom`,
         toggleClass: 'j-active',
         onUpdate: self => {
             let {progress} = self;
@@ -172,7 +170,7 @@ $(document).ready(function (e) {
                 return;
             }
 
-            console.log(progress);
+            // console.log(progress);
 
             window.scrollProgress = progress;
 
@@ -187,9 +185,7 @@ $(document).ready(function (e) {
             });
         },
         // snap: {
-        //   snapTo: [0, 0.25, 0.5, 0.75, 1],
-        //     duration: 0.000001,
-        //     delay: 0.0000001
+        //   snapTo: snapTo,
         // },
         onSnapComplete: self => {
             // console.log('canvas onSnapComplete', self);
