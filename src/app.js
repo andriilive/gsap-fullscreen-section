@@ -59,10 +59,10 @@ $(document).ready(function (e) {
         canvasAnimation
             .to(circle, circleAnimationValues[isActive])
             .to(sectionsButton, buttonAnimationValues[isActive])
-            .play()
+            .play();
     }
 
-    gsap.to($sections.not(':first-of-type').find('.section-content').toArray(), {autoAlpha: 0});
+    gsap.to($sections.not(':first-of-type').find('section-content-item__left').toArray(), {autoAlpha: 0});
 
     const CircleMoveDuration = 1.8;
 
@@ -80,8 +80,8 @@ $(document).ready(function (e) {
         const $section = $($sections[i]);
         const section = $section[0];
         $section.show();
-        gsap.to('.section-content', {autoAlpha: 0});
-        gsap.to(section.querySelector('.section-content'), {autoAlpha: 1});
+        gsap.to('.section-content-item__left', {autoAlpha: 0});
+        gsap.to(section.querySelector('.section-content-item__left'), {autoAlpha: 1});
         gsap.to(canvas, {background: randomColor, duration: 1});
         window.activeSection = i;
 
