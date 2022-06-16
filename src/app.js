@@ -7,7 +7,12 @@ ScrollTrigger.defaults({
     markers: false
 });
 
-let randomColor = () => '#' + Math.floor(Math.random()*16777215).toString(16);
+let randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16);
+
+function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
 
 $(document).ready(function (e) {
 
@@ -40,8 +45,6 @@ $(document).ready(function (e) {
 
     gsap.to(canvas, {background: randomColor});
 
-    gsap.to($sections.not(':first-of-type').find('.section-content').toArray(), {autoAlpha: 0, y: 500});
-
     const circleAnimationValues = {
         true: {scale: 1, duration: 0.3, ease: 'ease-in-out'},
         false: {scale: 0.7, duration: 0.3, ease: 'ease-in-out'},
@@ -59,21 +62,15 @@ $(document).ready(function (e) {
             .play()
     }
 
-    const duration = 1.8;
-    let circlePositionVars = {left: -400, top: -500, duration: duration};
-    gsap.to(circle, {left: -400, top: -500, duration: 0});
+    gsap.to($sections.not(':first-of-type').find('.section-content').toArray(), {autoAlpha: 0});
 
-    function move_circle(direction) {
+    const CircleMoveDuration = 1.8;
 
-        gsap.to(circle, {background: randomColor});
-        console.log('move circle to odd? true -> left || false -> right', direction)
-
-        if (!direction) {
-            circlePositionVars = {left: 'unset', right: -400, top: -500, duration: duration};
-        }
-
-        gsap.to(circle, circlePositionVars);
+    function circle_to_left() {
+        gsap.to(circle, {x: -400, top: -500, duration: CircleMoveDuration});
     }
+
+    circle_to_left();
 
     function switch_section(i) {
 
@@ -83,33 +80,42 @@ $(document).ready(function (e) {
         const $section = $($sections[i]);
         const section = $section[0];
         $section.show();
-        gsap.to('.section-content', {autoAlpha: 0, y: 500});
-        gsap.to(section.querySelector('.section-content'), {autoAlpha: 1, y: 0});
+        gsap.to('.section-content', {autoAlpha: 0});
+        gsap.to(section.querySelector('.section-content'), {autoAlpha: 1});
         gsap.to(canvas, {background: randomColor, duration: 1});
         window.activeSection = i;
 
         let odd = window.activeSection % 2 !== 0;
-        move_circle(odd);
+
+        if (odd) {
+            gsap.to(circle, {x: '100%', duration: CircleMoveDuration});
+        } else {
+            circle_to_left()
+        }
 
     }
 
+    window.sectionsContent = {
+        0: 1,
+        1: 1,
+        2: 1,
+        3: 1
+    }
+
     function switch_section_content(i) {
-        console.log(i);
+        // console.log(i);
 
         const sectionContent1 = sections[i].querySelector('.section-content-item-card__1');
         const sectionContent2 = sections[i].querySelector('.section-content-item-card__2');
 
-        console.log($sections.data('content'),'$sections.data(\'content\')');
+        const duration = 0.3;
+        let isFistSectionVisible = $(sections[i]).attr('data-content') === '1';
 
-        if ( $(sections[i]).data('content') === 1 ) {
-            gsap.to(sectionContent1, {autoAlpha: 0, display: 'none', duration: 0.1})
-            gsap.to(sectionContent2, {autoAlpha: 1, display: 'block', duration: 0.1})
-            $(sections[i]).data('content', 2);
-        } else {
-            gsap.to(sectionContent2, {autoAlpha: 0, display: 'none', duration: 0.1})
-            gsap.to(sectionContent1, {autoAlpha: 1, display: 'block', duration: 0.1})
-            $(sections[i]).data('content', 1);
-        }
+        $(sectionContent1).attr('hidden', isFistSectionVisible);
+        $(sectionContent2).attr('hidden', !isFistSectionVisible);
+        $(sections[i]).attr('data-content', isFistSectionVisible ? '2' : '1');
+
+        console.log($(sections[i]).attr('data-content'))
     }
 
     let sectionsChunks = [];
@@ -123,7 +129,7 @@ $(document).ready(function (e) {
 
     console.log(sectionsChunks);
 
-    sectionsChunks.forEach(function (value, index){
+    sectionsChunks.forEach(function (value, index) {
         console.log(value);
     });
 
@@ -133,26 +139,39 @@ $(document).ready(function (e) {
 
     $sections.not(':first-of-type').hide();
 
+    window.scrollProgress = 0;
+
     ScrollTrigger.create({
         id: 'canvas',
         trigger: canvas,
         start: 'top top',
-        scrub: true,
+        scrub: 10,
         pin: true,
         pinSpacing: true,
         end: `+=${sections.length * 100 * 2}% bottom`,
         toggleClass: 'j-active',
         onUpdate: self => {
             let {progress} = self;
-            progress = Math.round(progress * 100);
 
-            sectionsChunks.forEach(function (value, index){
-                if (progress === Math.round(value[0])) {
+            if (round(progress * 100) !== 0) {
+                progress = round(progress * 100);
+            }
 
-                    if (value[1] !== false) {
-                        switch_section(value[1]);
-                    } else {
+            // console.log(progress)
+            if ( window.scrollProgress === progress ) {
+                return;
+            }
+
+            console.log(progress);
+
+            window.scrollProgress = progress;
+
+            sectionsChunks.forEach(function (value, index) {
+                if (progress === round(value[0])) {
+                    if (value[1] === false) {
                         switch_section_content(sectionsChunks[index - 1][1]);
+                    } else {
+                        switch_section(value[1]);
                     }
                 }
             });
@@ -172,34 +191,5 @@ $(document).ready(function (e) {
             animate_canvas_elements(isActive)
         }
     });
-
-    /*sections.forEach(function (thisSection, i) {
-
-        let ThisSectionAnimation = gsap.timeline();
-
-        let tl = ScrollTrigger.create({
-            trigger: thisSection,
-            id: `section-${i}`,
-            start: 'top top',
-            scrub: true,
-            animation: ThisSectionAnimation,
-            end: 'bottom bottom',
-            // snap: {
-            //     snapTo: 1,
-            //     delay: 0,
-            //     duration: 0.01
-            // }
-        });
-
-        ThisSectionAnimation.fromTo(thisSection,
-            {
-                scaleY: 0
-            },
-            {
-                scaleY: 1
-            },
-        )
-
-    });*/
 
 })
